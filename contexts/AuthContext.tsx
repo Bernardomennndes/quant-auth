@@ -1,5 +1,13 @@
-import { createContext, ReactNode } from 'react';
+import { createContext, ReactNode, useState } from 'react';
 import { api } from '../services/api';
+import Router from 'next/router';
+import { setCookie } from 'nookies'
+
+type User = {
+    email: string;
+    permissions: string[];
+    roles: string[];
+}
 
 type SignInCredentials = {
     email: string;
@@ -8,6 +16,7 @@ type SignInCredentials = {
 
 type AuthContextData = {
     signIn: (credentials: SignInCredentials) => Promise<void>;
+    user: User;
     isAuthenticated: boolean;
 };
 
@@ -17,23 +26,44 @@ type AuthProviderProps = {
 
 export const AuthContext = createContext({} as AuthContextData);
 
-export function AuthProvider({ children }) {
+export function AuthProvider({ children }: AuthProviderProps) {
 
-    const isAuthenticated = false;
+    const [user, setUser] = useState<User>(null);
+    const isAuthenticated = !!user;
 
     async function signIn({ email, password }: SignInCredentials) {
         try {
-        const response = await api.post('sessions', {
-            email,
-            password
-        })
-    } catch (err) {
-        console.log(err);
-    }
+            const response = await api.post('sessions', {
+                email,
+                password
+            })
+
+            const { token, refreshToken, permissions, roles } = response.data;
+
+            setCookie(undefined, 'quantauth.token', token, {
+                maxAge: 60 * 60 * 24 * 30, // 30 Days
+                path: '/',
+            });
+            setCookie(undefined, 'quantauth.refreshToken', refreshToken, {
+                maxAge: 60 * 60 * 24 * 30, // 30 Days
+                path: '/',
+            });
+
+            setUser({
+                email,
+                permissions,
+                roles,
+            });
+
+            Router.push('/dashboard');
+
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     return (
-        <AuthContext.Provider value={{ signIn, isAuthenticated }}>
+        <AuthContext.Provider value={{ signIn, isAuthenticated, user }}>
             {children}
         </AuthContext.Provider>
     );
