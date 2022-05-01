@@ -12,17 +12,37 @@
   align-items: center;
 }
 
-.inputField {
+.inputDiv {
   width: 300px;
-
-  padding: 10px;
-
+  display: flex;
+  align-items: center;
+  
+  background-image: radial-gradient(circle, #fff , rgba(238, 238, 238, 0.336));
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.inputField + .inputField {
+.inputDiv + .inputDiv {
   margin-top: 10px;
+}
+
+.inputLabel {
+  width: 30%;
+  display: block;
+  text-align: center;
+
+  font-family: monospace, sans-serif;
+  font-size: 13px;
+}
+
+.inputField {
+  width: 70%;
+
+  padding: 10px;
+
+  border: 0;
+  border-left: 0;
+  border-radius: 0 4px 4px 0;
 }
 
 .formButton {
@@ -31,12 +51,15 @@
   margin-top: 20px;
   padding: 10px 50px;
 
+  font-size: 13px;
+  font-family: monospace, sans-serif;
+
   background: #444;
   color: #ddd;
 
   border: 0;
   border-radius: 4px;
-  box-shadow: 1px 1px 3px #333;
+  box-shadow: 1px 1px 3px rgb(80, 80, 80);
 
   transition: background 0.2s ease-out, color 0.2s ease-out;
 }

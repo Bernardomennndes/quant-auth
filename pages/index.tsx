@@ -1,10 +1,8 @@
-import { GetServerSideProps } from 'next';
 import Head from 'next/head'
 import Image from 'next/image'
 import { FormEvent, useContext, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import styles from '../styles/Home.module.css'
-import { parseCookies } from 'nookies'
 import { withSSRGuest } from '../utils/withSSRGuest';
 
 
@@ -35,19 +33,41 @@ export default function Home() {
         className={styles.main}
         onSubmit={handleSubmit}
       >
-        <input
-          type="email"
-          className={styles.inputField}
-          value={email}
-          onChange={event => setEmail(event.target.value)}
-        />
+        <div
+          className={styles.inputDiv}
+        >
+          <label
+            htmlFor="emailfield"
+            className={styles.inputLabel}
+          >
+            E-mail
+          </label>
+          <input
+            id="emailfield"
+            type="email"
+            className={styles.inputField}
+            value={email}
+            onChange={event => setEmail(event.target.value)}
+          />
+        </div>
 
-        <input
-          type="password"
-          className={styles.inputField}
-          value={password}
-          onChange={event => setPassword(event.target.value)}
-        />
+        <div
+          className={styles.inputDiv}  
+        >
+          <label
+            htmlFor="passwordfield"
+            className={styles.inputLabel}
+          >
+            Password
+          </label>
+          <input
+            id="passwordfield"
+            type="password"
+            className={styles.inputField}
+            value={password}
+            onChange={event => setPassword(event.target.value)}
+          />
+        </div>
 
         <button type="submit" className={styles.formButton}>Login</button>
       </form>
